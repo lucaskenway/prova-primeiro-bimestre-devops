@@ -1,0 +1,17 @@
+{
+  "name": "api-reservas",
+  "version": "1.0.0",
+  "description": "API de Reservas - Prova 1º Bimestre DevOps",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "express": "^4.22.3",
+    "pg": "^8.23.0"
+  }
+}

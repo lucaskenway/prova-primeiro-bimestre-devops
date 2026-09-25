@@ -1,0 +1,6 @@
+aws_region        = "us-east-1"
+project_name      = "prova-devops"
+repo_url          = "https://github.com/lucaskenway/prova-primeiro-bimestre-devops.git"
+ssh_allowed_cidrs = ["SEU.IP.PUBLICO/32"]
+key_name          = null
+db_password       = "troque_esta_senha"

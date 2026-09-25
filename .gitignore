@@ -1,0 +1,27 @@
+# Node
+node_modules/
+npm-debug.log*
+
+# Variáveis de ambiente (senhas reais nunca vão pro repo)
+.env
+.env.*
+!.env.example
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+*.tfvars
+!*.tfvars.example
+
+# Chaves SSH
+*.pem
+*.key
+
+# SO / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

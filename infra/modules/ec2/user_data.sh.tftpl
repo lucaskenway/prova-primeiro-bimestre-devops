@@ -1,0 +1,20 @@
+#!/bin/bash
+set -euxo pipefail
+
+dnf update -y
+dnf install -y docker git
+systemctl enable --now docker
+
+git clone ${repo_url} /opt/app
+cd /opt/app/app
+docker build -t api-reservas:latest .
+
+docker run -d --name reservas-api --restart unless-stopped \
+  -p ${app_port}:3000 \
+  -e POSTGRES_HOST='${db_host}' \
+  -e POSTGRES_PORT='${db_port}' \
+  -e POSTGRES_DB='${db_name}' \
+  -e POSTGRES_USER='${db_user}' \
+  -e POSTGRES_PASSWORD='${db_password}' \
+  -e POSTGRES_SSL='true' \
+  api-reservas:latest

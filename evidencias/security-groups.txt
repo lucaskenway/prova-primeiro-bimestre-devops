@@ -1,0 +1,18 @@
+- Entrada:
+  - CIDR:
+    - 45.175.114.197/32
+    DeSG: []
+    Porta: 22
+  - CIDR:
+    - 0.0.0.0/0
+    DeSG: []
+    Porta: 3000
+  Id: sg-0c502191cbf5c0c48
+  SG: prova-devops-ec2-sg
+- Entrada:
+  - CIDR: []
+    DeSG:
+    - sg-0c502191cbf5c0c48
+    Porta: 5432
+  Id: sg-07b7c9b4f7ae24331
+  SG: prova-devops-rds-sg

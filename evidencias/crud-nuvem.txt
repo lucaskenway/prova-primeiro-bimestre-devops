@@ -1,0 +1,33 @@
+# CRUD na nuvem — API na EC2 gravando no RDS PostgreSQL
+# API: http://ec2-44-197-186-217.compute-1.amazonaws.com:3000
+# Data: 2026-09-26 22:15 UTC
+
+$ GET /health
+{"status":"ok","db":"ok"}
+
+$ POST /reservas
+{"id":1,"cliente":"Weslley Lucas","data":"2026-10-01T14:00:00.000Z","status":"pendente"}  [HTTP 201]
+
+$ POST /reservas
+{"id":2,"cliente":"Maria Silva","data":"2026-10-02T19:30:00.000Z","status":"confirmada"}  [HTTP 201]
+
+$ POST /reservas (sem campos obrigatórios)
+{"erro":"Campos obrigatórios: cliente, data"}  [HTTP 400]
+
+$ GET /reservas
+[{"id":1,"cliente":"Weslley Lucas","data":"2026-10-01T14:00:00.000Z","status":"pendente"},{"id":2,"cliente":"Maria Silva","data":"2026-10-02T19:30:00.000Z","status":"confirmada"}]
+
+$ GET /reservas/1
+{"id":1,"cliente":"Weslley Lucas","data":"2026-10-01T14:00:00.000Z","status":"pendente"}  [HTTP 200]
+
+$ PUT /reservas/1
+{"id":1,"cliente":"Weslley Lucas","data":"2026-10-01T14:00:00.000Z","status":"confirmada"}  [HTTP 200]
+
+$ DELETE /reservas/2
+[HTTP 204]
+
+$ GET /reservas/2 (após delete)
+{"erro":"Reserva não encontrada"}  [HTTP 404]
+
+$ GET /reservas
+[{"id":1,"cliente":"Weslley Lucas","data":"2026-10-01T14:00:00.000Z","status":"confirmada"}]

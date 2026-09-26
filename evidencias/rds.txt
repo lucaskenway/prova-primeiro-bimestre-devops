@@ -1,0 +1,7 @@
+Classe: db.t3.micro
+Criptografado: true
+Engine: postgres
+Publico: false
+Status: available
+SubnetGroup: prova-devops-db-subnet-group
+Versao: '16.13'

@@ -1,6 +1,6 @@
 # Cria a infraestrutura do remote state (S3 + DynamoDB).
 # Aplicar UMA vez, antes do projeto principal:
-#   cd infra/backend && terraform init && terraform apply
+#   cd infra/backend && terraform init && terraform apply -var bucket_name=<nome>
 
 terraform {
   required_version = ">= 1.5"
@@ -38,28 +38,24 @@ variable "lock_table_name" {
   default = "terraform-state-lock"
 }
 
-resource "aws_s3_bucket" "state" {
+# O bucket é criado fora do Terraform porque, no Learner Lab, uma SCP nega
+# s3:GetBucketObjectLockConfiguration e o recurso aws_s3_bucket (provider v5)
+# sempre lê essa configuração, falhando em todo plan/apply. Crie antes com:
+#   aws s3api create-bucket --bucket <bucket_name> --region us-east-1
+# Versionamento, criptografia e bloqueio público seguem gerenciados abaixo.
+data "aws_s3_bucket" "state" {
   bucket = var.bucket_name
-
-  lifecycle {
-    prevent_destroy = true
-  }
-
-  tags = {
-    Name    = var.bucket_name
-    Projeto = "prova-devops"
-  }
 }
 
 resource "aws_s3_bucket_versioning" "state" {
-  bucket = aws_s3_bucket.state.id
+  bucket = data.aws_s3_bucket.state.id
   versioning_configuration {
     status = "Enabled"
   }
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "state" {
-  bucket = aws_s3_bucket.state.id
+  bucket = data.aws_s3_bucket.state.id
   rule {
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
@@ -68,7 +64,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "state" {
 }
 
 resource "aws_s3_bucket_public_access_block" "state" {
-  bucket                  = aws_s3_bucket.state.id
+  bucket                  = data.aws_s3_bucket.state.id
   block_public_acls       = true
   block_public_policy     = true
   ignore_public_acls      = true
@@ -92,7 +88,7 @@ resource "aws_dynamodb_table" "lock" {
 }
 
 output "bucket_name" {
-  value = aws_s3_bucket.state.id
+  value = data.aws_s3_bucket.state.id
 }
 
 output "lock_table_name" {

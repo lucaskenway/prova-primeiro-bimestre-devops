@@ -1,5 +1,6 @@
 #!/bin/bash
-set -euxo pipefail
+# Sem "set -x": o trace gravaria a senha do RDS no log do cloud-init
+set -euo pipefail
 
 dnf update -y
 dnf install -y docker git

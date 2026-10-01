@@ -1,0 +1,77 @@
+# Recursos na AWS (Learner Lab — us-east-1) — 2026-10-01 16:57 UTC
+
+$ aws resourcegroupstaggingapi get-resources --tag-filters Key=Projeto,Values=prova-devops --query 'ResourceTagMappingList[].ResourceARN' --output table
+-------------------------------------------------------------------------------
+|                                GetResources                                 |
++-----------------------------------------------------------------------------+
+|  arn:aws:ec2:us-east-1:504089150988:instance/i-0fb3762762f40b5a9            |
+|  arn:aws:ec2:us-east-1:504089150988:subnet/subnet-0336271c823f1611c         |
+|  arn:aws:rds:us-east-1:504089150988:db:prova-devops-postgres                |
+|  arn:aws:ec2:us-east-1:504089150988:internet-gateway/igw-07412a403884c70d4  |
+|  arn:aws:dynamodb:us-east-1:504089150988:table/terraform-state-lock         |
+|  arn:aws:ec2:us-east-1:504089150988:subnet/subnet-03fa71edd73e6fb1e         |
+|  arn:aws:ec2:us-east-1:504089150988:volume/vol-044bc70057c2a4b1e            |
+|  arn:aws:ec2:us-east-1:504089150988:security-group/sg-0650cc6fa7268a22a     |
+|  arn:aws:ec2:us-east-1:504089150988:subnet/subnet-06463fbe98c46079f         |
+|  arn:aws:ec2:us-east-1:504089150988:subnet/subnet-0abb0f80c3af103b8         |
+|  arn:aws:ec2:us-east-1:504089150988:vpc/vpc-0b04e2b45dbdc3b7b               |
+|  arn:aws:ec2:us-east-1:504089150988:route-table/rtb-05df41dc0e65f8180       |
+|  arn:aws:ec2:us-east-1:504089150988:route-table/rtb-0672b5de688692286       |
+|  arn:aws:rds:us-east-1:504089150988:subgrp:prova-devops-db-subnet-group     |
+|  arn:aws:s3:::prova-devops-tfstate-6325226                                  |
+|  arn:aws:ec2:us-east-1:504089150988:security-group/sg-039dcfa37220f96bc     |
+|  arn:aws:ec2:us-east-1:504089150988:subnet/subnet-0126506d295b18096         |
++-----------------------------------------------------------------------------+
+
+$ aws ec2 describe-vpcs --filters Name=tag:Projeto,Values=prova-devops --query 'Vpcs[].[VpcId,CidrBlock]' --output table
+------------------------------------------
+|              DescribeVpcs              |
++------------------------+---------------+
+|  vpc-0b04e2b45dbdc3b7b |  10.0.0.0/16  |
++------------------------+---------------+
+
+$ aws ec2 describe-subnets --filters Name=tag:Projeto,Values=prova-devops --query 'Subnets[].[Tags[?Key==`Name`]|[0].Value,CidrBlock,AvailabilityZone,MapPublicIpOnLaunch]' --output table
+-------------------------------------------------------------------
+|                         DescribeSubnets                         |
++-------------------------+---------------+-------------+---------+
+|  prova-devops-public-1  |  10.0.1.0/24  |  us-east-1a |  True   |
+|  prova-devops-private-1 |  10.0.11.0/24 |  us-east-1a |  False  |
+|  prova-devops-private-2 |  10.0.12.0/24 |  us-east-1b |  False  |
+|  prova-devops-public-2  |  10.0.2.0/24  |  us-east-1b |  True   |
++-------------------------+---------------+-------------+---------+
+
+$ aws ec2 describe-instances --filters Name=tag:Name,Values=prova-devops-api Name=instance-state-name,Values=running --query 'Reservations[].Instances[].{Id:InstanceId,Tipo:InstanceType,Subnet:SubnetId,IP:PublicIpAddress,Perfil:IamInstanceProfile.Arn}' --output table
+-----------------------------------------------------------------------------
+|                             DescribeInstances                             |
++--------+------------------------------------------------------------------+
+|  IP    |  44.193.223.249                                                  |
+|  Id    |  i-0fb3762762f40b5a9                                             |
+|  Perfil|  arn:aws:iam::504089150988:instance-profile/LabInstanceProfile   |
+|  Subnet|  subnet-06463fbe98c46079f                                        |
+|  Tipo  |  t2.micro                                                        |
++--------+------------------------------------------------------------------+
+
+$ aws rds describe-db-instances --db-instance-identifier prova-devops-postgres --query 'DBInstances[0].[DBInstanceClass,DBInstanceStatus,PubliclyAccessible,StorageEncrypted,Endpoint.Address]' --output table
+--------------------------------------------------------------------
+|                        DescribeDBInstances                       |
++------------------------------------------------------------------+
+|  db.t3.micro                                                     |
+|  available                                                       |
+|  False                                                           |
+|  True                                                            |
+|  prova-devops-postgres.cumscnwfheb2.us-east-1.rds.amazonaws.com  |
++------------------------------------------------------------------+
+
+$ aws s3api get-bucket-versioning --bucket prova-devops-tfstate-6325226
+{
+    "Status": "Enabled"
+}
+
+$ aws dynamodb describe-table --table-name terraform-state-lock --query 'Table.[TableName,TableStatus]'
+[
+    "terraform-state-lock",
+    "ACTIVE"
+]
+
+$ curl -s http://44.193.223.249:3000/health
+{"status":"ok","db":"ok"}

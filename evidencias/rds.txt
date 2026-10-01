@@ -1,7 +1,38 @@
+# RDS PostgreSQL — 2026-10-01 16:57 UTC
+
+$ aws rds describe-db-instances --db-instance-identifier prova-devops-postgres --query 'DBInstances[0].{Classe:DBInstanceClass,Engine:Engine,Versao:EngineVersion,Status:DBInstanceStatus,Publico:PubliclyAccessible,Criptografado:StorageEncrypted,SubnetGroup:DBSubnetGroup.DBSubnetGroupName,Subnets:DBSubnetGroup.Subnets[].SubnetIdentifier,SG:VpcSecurityGroups[].VpcSecurityGroupId}' --output yaml
 Classe: db.t3.micro
 Criptografado: true
 Engine: postgres
 Publico: false
+SG:
+- sg-039dcfa37220f96bc
 Status: available
 SubnetGroup: prova-devops-db-subnet-group
+Subnets:
+- subnet-0126506d295b18096
+- subnet-0336271c823f1611c
 Versao: '16.13'
+
+$ aws ec2 describe-subnets --filters Name=tag:Projeto,Values=prova-devops Name=tag:Name,Values='prova-devops-private-*' --query 'Subnets[].[SubnetId,Tags[?Key==`Name`]|[0].Value,AvailabilityZone,MapPublicIpOnLaunch]' --output table
+-------------------------------------------------------------------------------
+|                               DescribeSubnets                               |
++---------------------------+--------------------------+-------------+--------+
+|  subnet-0126506d295b18096 |  prova-devops-private-1  |  us-east-1a |  False |
+|  subnet-0336271c823f1611c |  prova-devops-private-2  |  us-east-1b |  False |
++---------------------------+--------------------------+-------------+--------+
+
+# Teste de fora da AWS (do computador do aluno): o banco não aceita conexão direta
+$ getent hosts prova-devops-postgres.cumscnwfheb2.us-east-1.rds.amazonaws.com
+
+$ timeout 8 bash -c '</dev/tcp/prova-devops-postgres.cumscnwfheb2.us-east-1.rds.amazonaws.com/5432' && echo 'porta 5432 ABERTA' || echo 'porta 5432 inacessível de fora da VPC (timeout/recusado)'
+bash: line 1: prova-devops-postgres.cumscnwfheb2.us-east-1.rds.amazonaws.com: No address associated with hostname
+bash: line 1: /dev/tcp/prova-devops-postgres.cumscnwfheb2.us-east-1.rds.amazonaws.com/5432: Invalid argument
+porta 5432 inacessível de fora da VPC (timeout/recusado)
+
+# Observação: o DNS local do computador do aluno não resolve o nome (bloqueia respostas com IP privado).
+# Pelo DNS público do Google o nome resolve para um IP PRIVADO da subnet 10.0.11.0/24 (prova-devops-private-1):
+$ curl -s 'https://dns.google/resolve?name=prova-devops-postgres.cumscnwfheb2.us-east-1.rds.amazonaws.com&type=A'
+Respostas: ['10.0.11.16']
+
+# Conclusão: o RDS não tem IP público (Publico: false); mesmo conhecendo o endereço, 10.0.x.x só é alcançável dentro da VPC, e o SG do RDS só aceita 5432 vindo do SG da EC2.

@@ -1,3 +1,6 @@
+# Security Groups — 2026-10-01 16:57 UTC
+
+$ aws ec2 describe-security-groups --filters Name=group-name,Values='prova-devops-*' --query 'SecurityGroups[].{SG:GroupName,Id:GroupId,Entrada:IpPermissions[].{Porta:FromPort,CIDR:IpRanges[].CidrIp,DeSG:UserIdGroupPairs[].GroupId}}' --output yaml
 - Entrada:
   - CIDR:
     - 45.175.114.197/32
@@ -7,12 +10,13 @@
     - 0.0.0.0/0
     DeSG: []
     Porta: 3000
-  Id: sg-0c502191cbf5c0c48
+  Id: sg-0650cc6fa7268a22a
   SG: prova-devops-ec2-sg
 - Entrada:
   - CIDR: []
     DeSG:
-    - sg-0c502191cbf5c0c48
+    - sg-0650cc6fa7268a22a
     Porta: 5432
-  Id: sg-07b7c9b4f7ae24331
+  Id: sg-039dcfa37220f96bc
   SG: prova-devops-rds-sg
+

@@ -23,7 +23,7 @@ O projeto passa por todas as etapas do bimestre:
 app/                API Node.js/Express (CRUD /reservas + /health) e Dockerfile
 docker-compose.yml  API + PostgreSQL local (volume nomeado, rede bridge, healthcheck)
 infra/              Terraform: módulos vpc, security-group, ec2, rds + backend/ (S3 + DynamoDB)
-evidencias/         Saídas de docker build, docker compose ps e terraform plan
+evidencias/         Saídas de docker build, testes locais, terraform validate/plan/destroy e AWS
 relatorio.md        Relatório do processo com IA
 ```
 
@@ -59,6 +59,10 @@ Pré-requisito: credenciais do Learner Lab (AWS Details → AWS CLI) em `~/.aws/
 
 ```bash
 # 1. Remote state (uma vez)
+# O bucket é criado pela CLI: no Learner Lab uma SCP bloqueia o recurso
+# aws_s3_bucket do Terraform (ver infra/backend/main.tf). Versionamento,
+# criptografia, bloqueio público e a tabela DynamoDB de lock são do Terraform.
+aws s3api create-bucket --bucket prova-devops-tfstate-6325226 --region us-east-1
 cd infra/backend
 terraform init
 terraform apply -var="bucket_name=prova-devops-tfstate-6325226"

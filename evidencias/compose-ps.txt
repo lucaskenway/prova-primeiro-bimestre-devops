@@ -1,3 +1,6 @@
-NAME           IMAGE                 COMMAND                  SERVICE   CREATED          STATUS                    PORTS
-reservas-api   api-reservas:latest   "docker-entrypoint.s…"   api       37 seconds ago   Up 30 seconds (healthy)   0.0.0.0:3001->3000/tcp, [::]:3001->3000/tcp
-reservas-db    postgres:16-alpine    "docker-entrypoint.s…"   db        37 seconds ago   Up 36 seconds (healthy)   5432/tcp
+# docker compose ps — 2026-10-01 16:37 UTC (imagem 2b3fba083d15, código com as correções)
+# Porta 3001 no host: a 3000 deste computador está ocupada por outro projeto (PORT=3001)
+$ docker compose ps
+NAME           IMAGE                 COMMAND                  SERVICE   CREATED         STATUS                   PORTS
+reservas-api   api-reservas:latest   "docker-entrypoint.s…"   api       4 minutes ago   Up 4 minutes (healthy)   0.0.0.0:3001->3000/tcp, [::]:3001->3000/tcp
+reservas-db    postgres:16-alpine    "docker-entrypoint.s…"   db        4 minutes ago   Up 4 minutes (healthy)   5432/tcp

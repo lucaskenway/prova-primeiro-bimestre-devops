@@ -1,0 +1,160 @@
+# Testes locais — API + PostgreSQL via Docker Compose
+# Data: 2026-10-01 00:40 UTC
+# Porta do host: 3001 (a 3000 deste computador está ocupada por outro projeto; PORT=3001 sobrescreve o .env)
+# Imagem construída antes com: docker build -t api-reservas:latest app (ver docker-build.txt)
+
+## 1. Subida do ambiente
+$ docker compose up -d --no-build --force-recreate 2>&1 | grep -v WARN
+ Container reservas-db Recreate 
+ Container reservas-db Recreated 
+ Container reservas-api Recreate 
+ Container reservas-api Recreated 
+ Container reservas-db Starting 
+ Container reservas-db Started 
+ Container reservas-db Waiting 
+ Container reservas-db Healthy 
+ Container reservas-api Starting 
+ Container reservas-api Started 
+
+
+$ docker compose ps --format 'table {{.Name}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}'
+NAME           IMAGE                 STATUS                    PORTS
+reservas-api   api-reservas:latest   Up 5 seconds (healthy)    0.0.0.0:3001->3000/tcp, [::]:3001->3000/tcp
+reservas-db    postgres:16-alpine    Up 11 seconds (healthy)   5432/tcp
+
+
+$ docker volume ls --filter name=pgdata --format '{{.Name}}'
+prova-primeiro-bimestre-devops_pgdata
+technova-api_pgdata
+
+
+$ docker network ls --filter name=reservas-net --format '{{.Name}} driver={{.Driver}}'
+prova-primeiro-bimestre-devops_reservas-net driver=bridge
+
+
+## 2. /health
+$ curl -s -w ' [HTTP %{http_code}]' localhost:3001/health
+{"status":"ok","db":"ok"} [HTTP 200]
+
+## 3. CRUD
+$ curl -s -X POST localhost:3001/reservas -H 'Content-Type: application/json' -d '{"cliente":"Maria Silva","data":"2026-10-01T14:00:00Z"}'
+{"id":23,"cliente":"Maria Silva","data":"2026-10-01T14:00:00.000Z","status":"pendente"}  (status omitido -> padrão pendente)
+
+
+$ curl -s -X POST localhost:3001/reservas -H 'Content-Type: application/json' -d '{"cliente":"Joao Souza","data":"2026-10-02T19:30:00-03:00","status":"confirmada"}'
+{"id":24,"cliente":"Joao Souza","data":"2026-10-02T22:30:00.000Z","status":"confirmada"}
+
+
+$ curl -s -w ' [HTTP %{http_code}]' localhost:3001/reservas/23
+{"id":23,"cliente":"Maria Silva","data":"2026-10-01T14:00:00.000Z","status":"pendente"} [HTTP 200]
+
+$ curl -s -w ' [HTTP %{http_code}]' -X PUT localhost:3001/reservas/24 -H 'Content-Type: application/json' -d '{"cliente":"Joao Souza Jr","data":"2026-10-03T20:00:00Z"}'  # sem status: mantém confirmada
+{"id":24,"cliente":"Joao Souza Jr","data":"2026-10-03T20:00:00.000Z","status":"confirmada"} [HTTP 200]
+
+$ curl -s -w ' [HTTP %{http_code}]' -X PUT localhost:3001/reservas/23 -H 'Content-Type: application/json' -d '{"cliente":"Maria Silva","data":"2026-10-01T14:00:00Z","status":"cancelada"}'
+{"id":23,"cliente":"Maria Silva","data":"2026-10-01T14:00:00.000Z","status":"cancelada"} [HTTP 200]
+
+$ curl -s -w ' [HTTP %{http_code}]' -X DELETE localhost:3001/reservas/23
+ [HTTP 204]
+
+$ curl -s -w ' [HTTP %{http_code}]' localhost:3001/reservas/23  # após delete
+{"erro":"Reserva não encontrada"} [HTTP 404]
+
+$ curl -s -w ' [HTTP %{http_code}]' -X PUT localhost:3001/reservas/23 -H 'Content-Type: application/json' -d '{"cliente":"x","data":"2026-10-01"}'  # inexistente
+{"erro":"Reserva não encontrada"} [HTTP 404]
+
+$ curl -s -w ' [HTTP %{http_code}]' -X DELETE localhost:3001/reservas/23  # inexistente
+{"erro":"Reserva não encontrada"} [HTTP 404]
+
+$ curl -s -w ' [HTTP %{http_code}]' localhost:3001/reservas
+[{"id":24,"cliente":"Joao Souza Jr","data":"2026-10-03T20:00:00.000Z","status":"confirmada"}] [HTTP 200]
+
+## 4. Validações
+$ curl -s -w ' [HTTP %{http_code}]' -X POST localhost:3001/reservas -H 'Content-Type: application/json' -d '{"data":"2026-10-01T14:00:00Z"}'  # sem cliente
+{"erro":"Campos obrigatórios: cliente, data"} [HTTP 400]
+
+$ curl -s -w ' [HTTP %{http_code}]' -X POST localhost:3001/reservas -H 'Content-Type: application/json' -d '{"cliente":"Ana"}'  # sem data
+{"erro":"Campos obrigatórios: cliente, data"} [HTTP 400]
+
+$ curl -s -w ' [HTTP %{http_code}]' -X POST localhost:3001/reservas -H 'Content-Type: application/json' -d '{"cliente":"Ana","data":"2026-10-01T14:00:00Z","status":"aprovada"}'  # status inválido
+{"erro":"status deve ser um de: pendente, confirmada, cancelada"} [HTTP 400]
+
+$ curl -s -w ' [HTTP %{http_code}]' -X POST localhost:3001/reservas -H 'Content-Type: application/json' -d '{"cliente":"Ana","data":"01/10/2026"}'  # não ISO 8601
+{"erro":"data inválida (use ISO 8601, ex: 2026-10-01T14:00:00Z)"} [HTTP 400]
+
+$ curl -s -w ' [HTTP %{http_code}]' -X POST localhost:3001/reservas -H 'Content-Type: application/json' -d '{"cliente":"Ana","data":"October 1, 2026"}'  # não ISO 8601
+{"erro":"data inválida (use ISO 8601, ex: 2026-10-01T14:00:00Z)"} [HTTP 400]
+
+$ curl -s -w ' [HTTP %{http_code}]' -X POST localhost:3001/reservas -H 'Content-Type: application/json' -d '{"cliente":"Ana","data":"2026-02-30"}'  # dia inexistente
+{"erro":"data inválida (use ISO 8601, ex: 2026-10-01T14:00:00Z)"} [HTTP 400]
+
+$ curl -s -w ' [HTTP %{http_code}]' -X POST localhost:3001/reservas -H 'Content-Type: application/json' -d '{"cliente":"Ana","data":123}'  # não é string
+{"erro":"data inválida (use ISO 8601, ex: 2026-10-01T14:00:00Z)"} [HTTP 400]
+
+## 5. /health com o banco indisponível
+$ curl -s -o /dev/null localhost:3001/reservas  # deixa conexão ociosa no pool
+
+
+$ docker compose stop db 2>&1
+ Container reservas-db Stopping 
+ Container reservas-db Stopped 
+
+
+$ curl -s -m 10 -w ' [HTTP %{http_code}]' localhost:3001/health
+{"status":"erro","db":"indisponivel"} [HTTP 503]
+
+$ curl -s -m 10 -w ' [HTTP %{http_code}]' localhost:3001/reservas
+{"erro":"Erro interno"} [HTTP 500]
+
+$ docker inspect reservas-api --format 'api: {{.State.Status}} RestartCount={{.RestartCount}}'
+api: running RestartCount=0
+
+
+$ docker compose start db 2>&1
+ Container reservas-db Starting 
+ Container reservas-db Started 
+
+
+$ curl -s -w ' [HTTP %{http_code}]' localhost:3001/health  # recuperou sem reiniciar a API
+{"status":"ok","db":"ok"} [HTTP 200]
+
+## 6. Persistência no volume nomeado (down sem -v + up)
+$ docker compose down 2>&1
+ Container reservas-api Stopping 
+ Container reservas-api Stopped 
+ Container reservas-api Removing 
+ Container reservas-api Removed 
+ Container reservas-db Stopping 
+ Container reservas-db Stopped 
+ Container reservas-db Removing 
+ Container reservas-db Removed 
+ Network prova-primeiro-bimestre-devops_reservas-net Removing 
+ Network prova-primeiro-bimestre-devops_reservas-net Removed 
+
+
+$ docker compose up -d --no-build 2>&1 | grep -v WARN
+ Network prova-primeiro-bimestre-devops_reservas-net Creating 
+ Network prova-primeiro-bimestre-devops_reservas-net Creating 
+ Network prova-primeiro-bimestre-devops_reservas-net Created 
+ Network prova-primeiro-bimestre-devops_reservas-net Created 
+ Container reservas-db Creating 
+ Container reservas-db Created 
+ Container reservas-api Creating 
+ Container reservas-api Created 
+ Container reservas-db Starting 
+ Container reservas-db Started 
+ Container reservas-db Waiting 
+ Container reservas-db Healthy 
+ Container reservas-api Starting 
+ Container reservas-api Started 
+
+
+$ curl -s -w ' [HTTP %{http_code}]' localhost:3001/reservas/24  # reserva criada antes do down continua no banco
+{"id":24,"cliente":"Joao Souza Jr","data":"2026-10-03T20:00:00.000Z","status":"confirmada"} [HTTP 200]
+
+$ docker compose ps --format 'table {{.Name}}\t{{.Status}}'
+NAME           STATUS
+reservas-api   Up 5 seconds (healthy)
+reservas-db    Up 11 seconds (healthy)
+
+

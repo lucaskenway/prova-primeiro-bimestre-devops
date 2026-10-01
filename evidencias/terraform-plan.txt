@@ -1,3 +1,6 @@
+# terraform plan — 2026-10-01 16:39 UTC (Learner Lab, us-east-1)
+# AMI escolhida: ami-03c3da4cfa8e8943a = al2023-ami-2023.12.20260930.0-kernel-6.1-x86_64 (Amazon Linux 2023 padrão)
+$ cd infra && terraform plan
 
 Warning: Deprecated Parameter
 
@@ -7,7 +10,7 @@ Acquiring state lock. This may take a few moments...
 module.vpc.data.aws_availability_zones.available: Reading...
 module.ec2.data.aws_ami.al2023: Reading...
 module.vpc.data.aws_availability_zones.available: Read complete after 1s [id=us-east-1]
-module.ec2.data.aws_ami.al2023: Read complete after 2s [id=ami-0a2601fa32a0e773d]
+module.ec2.data.aws_ami.al2023: Read complete after 2s [id=ami-03c3da4cfa8e8943a]
 
 Terraform used the selected providers to generate the following execution
 plan. Resource actions are indicated with the following symbols:
@@ -17,7 +20,7 @@ Terraform will perform the following actions:
 
   # module.ec2.aws_instance.this will be created
   + resource "aws_instance" "this" {
-      + ami                                  = "ami-0a2601fa32a0e773d"
+      + ami                                  = "ami-03c3da4cfa8e8943a"
       + arn                                  = (known after apply)
       + associate_public_ip_address          = (known after apply)
       + availability_zone                    = (known after apply)
@@ -38,7 +41,7 @@ Terraform will perform the following actions:
       + instance_type                        = "t2.micro"
       + ipv6_address_count                   = (known after apply)
       + ipv6_addresses                       = (known after apply)
-      + key_name                             = (known after apply)
+      + key_name                             = "vockey"
       + monitoring                           = (known after apply)
       + outpost_arn                          = (known after apply)
       + password_data                        = (known after apply)
@@ -236,6 +239,19 @@ Terraform will perform the following actions:
               + security_groups  = []
               + self             = false
               + to_port          = 3000
+            },
+          + {
+              + cidr_blocks      = [
+                  + "45.175.114.197/32",
+                ]
+              + description      = "SSH"
+              + from_port        = 22
+              + ipv6_cidr_blocks = []
+              + prefix_list_ids  = []
+              + protocol         = "tcp"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 22
             },
         ]
       + name                   = "prova-devops-ec2-sg"
@@ -535,3 +551,4 @@ Changes to Outputs:
 
 Note: You didn't use the -out option to save this plan, so Terraform can't
 guarantee to take exactly these actions if you run "terraform apply" now.
+Releasing state lock. This may take a few moments...

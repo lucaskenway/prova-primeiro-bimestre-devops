@@ -1,0 +1,16 @@
+# terraform fmt + validate — 2026-10-01 00:37 UTC
+$ terraform version
+Terraform v1.16.0
+
+$ cd infra && terraform fmt -check -recursive
+(sem saída: todos os arquivos formatados) exit=0
+
+$ cd infra && terraform validate
+Success! The configuration is valid.
+
+exit=0
+
+$ cd infra/backend && terraform validate
+Success! The configuration is valid.
+
+exit=0

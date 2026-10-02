@@ -42,6 +42,7 @@ Os prompts principais foram:
 3. Quando o `terraform apply` do backend falhou, colei a mensagem de erro do terminal (`403 AccessDenied`) e pedi a causa e a correção.
 4. Pedi os comandos da AWS CLI para conferir os recursos e salvar as saídas como evidência.
 5. Antes da entrega, pedi uma auditoria detalhada comparando o projeto com o enunciado, sem alterar nada, procurando "pegadinhas". Depois pedi para classificar cada problema (exigência da prova, requisito de funcionamento ou só melhoria) e só então para corrigir, testando cada correção antes de passar para a próxima e sem inventar evidências.
+6. No dia da prova, pedi para rodar os testes locais, o `terraform plan`, o `apply`, gerar as evidências da nuvem e o `destroy`, acompanhando cada etapa. Também pedi que a IA não aparecesse como coautora dos commits nem no Pull Request.
 
 A IA gerou bem a parte repetitiva: a estrutura dos módulos Terraform, o Dockerfile, o Compose e os comandos de verificação. Mas errou em vários pontos que precisei corrigir:
 
@@ -60,6 +61,8 @@ A auditoria final encontrou erros que pareciam corretos à primeira vista:
 - O `user_data` usava `set -x`, que gravaria a senha do RDS no log de boot da EC2. Removi o `-x`.
 - O README não tinha o passo de criar o bucket pela CLI, então quem seguisse o README não conseguiria subir o backend.
 - O checklist de entrega estava marcado com `terraform validate`, mas não havia evidência disso. Gerei `evidencias/terraform-validate.txt`.
+
+A própria IA também errou parcialmente: na auditoria ela disse que a minha frase "o endereço do RDS nem resolve" provavelmente estava errada. No teste real, o DNS do meu computador realmente não resolvia o nome (ele bloqueia respostas com IP privado), mas pelo DNS público do Google o nome resolvia para `10.0.x.x`, um IP privado. Os dois estavam parcialmente certos, e só o teste mostrou o motivo real. Reescrevi a explicação com base no teste (`evidencias/rds.txt`).
 
 Comparando com fazer manualmente, a IA economizou muito tempo escrevendo Terraform e os comandos da AWS CLI, que eu levaria horas para montar consultando a documentação.
 Ela atrapalhou quando não conhecia as restrições do Learner Lab (SCP do S3, AMI errada) e quando entregava algo que funcionava no caso feliz mas falhava no caso de erro, como a data e a queda do banco.
@@ -100,6 +103,7 @@ O Learner Lab exigiu alguns ajustes em relação ao que foi ensinado:
 - **Região:** sempre `us-east-1`, fixada no provider e no backend.
 - **IAM:** não é possível criar IAM, então usei o `LabInstanceProfile` e o key pair `vockey`, que já existem no Lab.
 - **SCP:** algumas ações são bloqueadas, como a leitura de object lock do S3. Por isso o bucket é criado pela CLI e o resto do backend pelo Terraform.
+- **Sessão expirando e troca de conta:** no dia da prova, a sessão do Lab expirou no meio do trabalho e as credenciais foram canceladas (a AWS passou a responder com uma política `voc-cancel-cred`). Precisei refazer o ciclo completo em outra conta do Learner Lab. Como nomes de bucket S3 são únicos no mundo inteiro e `prova-devops-tfstate-6325226` já existia na conta antiga, criei o bucket `prova-devops-tfstate-6325226-b` e passei o nome só na hora do `terraform init -backend-config="bucket=..."`, sem alterar o código. As evidências dessa subida estão em `evidencias/subida-conta-377871695195/`.
 
 A senha do banco não fica no código: ela vai no `terraform.tfvars`, que está no `.gitignore`, e a variável é marcada como `sensitive`.
 Todos os recursos recebem tags com o nome do projeto e `ManagedBy = terraform`, pelo `default_tags` do provider.
@@ -117,11 +121,13 @@ Mesmo com a IA gerando o código, a responsabilidade pelo que vai para a nuvem �
 7. Conferi o remote state na AWS: bucket versionado e criptografado, mais a tabela de lock (`evidencias/remote-state.txt`).
 8. Testei todas as rotas do CRUD, primeiro localmente com o Compose, incluindo dados inválidos e o banco parado (`evidencias/testes-locais.txt`), e depois na nuvem (`evidencias/crud-nuvem.txt`).
 9. Quando algo falhou (o bucket S3 e a AMI), li a mensagem de erro para entender a causa antes de aceitar a correção.
-10. Depois de capturar as evidências, rodo `terraform destroy` para não gastar os créditos do Learner Lab.
+10. Depois de capturar as evidências, rodei `terraform destroy` para não gastar os créditos do Learner Lab (`evidencias/terraform-destroy.txt` e `evidencias/subida-conta-377871695195/terraform-destroy.txt`). Uma segunda subida, feita na conta antiga só para tirar prints, ficou sem `destroy`, porque a sessão do Lab expirou antes. Ela precisa ser destruída quando eu tiver acesso de novo àquela conta.
 
 Se eu tivesse aceitado o código da IA sem revisar, os problemas teriam sido reais. A EC2 não subiria por causa da AMI errada. Uma chave `.pem` poderia ir parar no GitHub porque a IA tirou o `*.pem` do `.gitignore`.
 A API aceitaria `01/10/2026` e gravaria a reserva em 10 de janeiro, um erro silencioso que o cliente só descobriria no dia errado. A API cairia toda vez que o banco reiniciasse, e a senha do RDS ficaria no log de boot da EC2.
 Vários desses erros passavam no teste mais simples (criar uma reserva válida e listar) e só apareceram quando testei os casos de erro.
+
+Ler o `plan` antes de aplicar também evitou um erro no dia da prova. Durante o `apply`, o computador entrou em suspensão e o Terraform ficou travado em "Still creating" no RDS, mesmo com o banco já `available` na AWS. Interrompi com Ctrl+C, que salva o state e libera o lock, em vez de forçar o destravamento. O `plan` seguinte mostrou que o Terraform ia apagar e recriar o RDS, porque ele ficou marcado como `tainted`. Como o banco estava saudável, usei `terraform untaint` e só apliquei depois de conferir que o plano era exatamente "1 to add", ou seja, só a EC2 (`evidencias/subida-conta-377871695195/terraform-apply.txt`). Se eu tivesse rodado o `apply` sem ler o plano, teria perdido mais uns 10 minutos recriando o banco.
 
 A evolução Git → Docker → Terraform → Modules me preparou para usar a IA com responsabilidade.
 O Git me deu um histórico em que cada mudança da IA vira um diff que eu leio e posso desfazer.

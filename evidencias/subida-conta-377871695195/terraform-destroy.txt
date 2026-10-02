@@ -1,0 +1,642 @@
+# terraform destroy — 2026-10-02 00:28 UTC (conta 377871695195, após capturar as evidências)
+$ cd infra && terraform destroy -auto-approve
+
+Warning: Deprecated Parameter
+
+The parameter "dynamodb_table" is deprecated. Use parameter "use_lockfile"
+instead.
+Acquiring state lock. This may take a few moments...
+module.ec2.data.aws_ami.al2023: Reading...
+module.vpc.data.aws_availability_zones.available: Reading...
+module.vpc.aws_vpc.this: Refreshing state... [id=vpc-0a9ca6bee9ccb8368]
+module.vpc.data.aws_availability_zones.available: Read complete after 0s [id=us-east-1]
+module.ec2.data.aws_ami.al2023: Read complete after 1s [id=ami-03c3da4cfa8e8943a]
+module.vpc.aws_subnet.private[1]: Refreshing state... [id=subnet-0a0383250485ae675]
+module.vpc.aws_internet_gateway.this: Refreshing state... [id=igw-0e7642495af94f777]
+module.vpc.aws_route_table.private: Refreshing state... [id=rtb-00a32ee6c11909edb]
+module.vpc.aws_subnet.public[1]: Refreshing state... [id=subnet-00a6ee8a233743d6e]
+module.vpc.aws_subnet.public[0]: Refreshing state... [id=subnet-0d3e21cb9d5f9c28c]
+module.vpc.aws_subnet.private[0]: Refreshing state... [id=subnet-020260fcf9bcaa3f2]
+module.security_group.aws_security_group.ec2: Refreshing state... [id=sg-0d6a4b3a7ecdd7ac3]
+module.vpc.aws_route_table.public: Refreshing state... [id=rtb-0a28dad270350c568]
+module.security_group.aws_security_group.rds: Refreshing state... [id=sg-0da2843a49d982abd]
+module.vpc.aws_route_table_association.private[0]: Refreshing state... [id=rtbassoc-0ae39f35d181546f2]
+module.vpc.aws_route_table_association.private[1]: Refreshing state... [id=rtbassoc-022366355a023a976]
+module.rds.aws_db_subnet_group.this: Refreshing state... [id=prova-devops-db-subnet-group]
+module.vpc.aws_route_table_association.public[1]: Refreshing state... [id=rtbassoc-054ca753a678d2912]
+module.vpc.aws_route_table_association.public[0]: Refreshing state... [id=rtbassoc-063fe0680d3da714d]
+module.rds.aws_db_instance.this: Refreshing state... [id=db-D2RUTSOCFPRQTXTXUBXU6CGJVQ]
+module.ec2.aws_instance.this: Refreshing state... [id=i-042035045c988d699]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  - destroy
+
+Terraform will perform the following actions:
+
+  # module.ec2.aws_instance.this will be destroyed
+  - resource "aws_instance" "this" {
+      - ami                                  = "ami-03c3da4cfa8e8943a" -> null
+      - arn                                  = "arn:aws:ec2:us-east-1:377871695195:instance/i-042035045c988d699" -> null
+      - associate_public_ip_address          = true -> null
+      - availability_zone                    = "us-east-1a" -> null
+      - cpu_core_count                       = 1 -> null
+      - cpu_threads_per_core                 = 1 -> null
+      - disable_api_stop                     = false -> null
+      - disable_api_termination              = false -> null
+      - ebs_optimized                        = false -> null
+      - get_password_data                    = false -> null
+      - hibernation                          = false -> null
+      - iam_instance_profile                 = "LabInstanceProfile" -> null
+      - id                                   = "i-042035045c988d699" -> null
+      - instance_initiated_shutdown_behavior = "stop" -> null
+      - instance_state                       = "running" -> null
+      - instance_type                        = "t2.micro" -> null
+      - ipv6_address_count                   = 0 -> null
+      - ipv6_addresses                       = [] -> null
+      - key_name                             = "vockey" -> null
+      - monitoring                           = false -> null
+      - placement_partition_number           = 0 -> null
+      - primary_network_interface_id         = "eni-011d2cec8e936174d" -> null
+      - private_dns                          = "ip-10-0-1-66.ec2.internal" -> null
+      - private_ip                           = "10.0.1.66" -> null
+      - public_dns                           = "ec2-3-86-96-150.compute-1.amazonaws.com" -> null
+      - public_ip                            = "3.86.96.150" -> null
+      - secondary_private_ips                = [] -> null
+      - security_groups                      = [] -> null
+      - source_dest_check                    = true -> null
+      - subnet_id                            = "subnet-0d3e21cb9d5f9c28c" -> null
+      - tags                                 = {
+          - "Name" = "prova-devops-api"
+        } -> null
+      - tags_all                             = {
+          - "ManagedBy" = "terraform"
+          - "Name"      = "prova-devops-api"
+          - "Projeto"   = "prova-devops"
+        } -> null
+      - tenancy                              = "default" -> null
+      - user_data                            = (sensitive value) -> null
+      - user_data_replace_on_change          = true -> null
+      - vpc_security_group_ids               = [
+          - "sg-0d6a4b3a7ecdd7ac3",
+        ] -> null
+        # (6 unchanged attributes hidden)
+
+      - capacity_reservation_specification {
+          - capacity_reservation_preference = "open" -> null
+        }
+
+      - cpu_options {
+          - core_count       = 1 -> null
+          - threads_per_core = 1 -> null
+            # (1 unchanged attribute hidden)
+        }
+
+      - credit_specification {
+          - cpu_credits = "standard" -> null
+        }
+
+      - enclave_options {
+          - enabled = false -> null
+        }
+
+      - maintenance_options {
+          - auto_recovery = "default" -> null
+        }
+
+      - metadata_options {
+          - http_endpoint               = "enabled" -> null
+          - http_protocol_ipv6          = "disabled" -> null
+          - http_put_response_hop_limit = 2 -> null
+          - http_tokens                 = "required" -> null
+          - instance_metadata_tags      = "disabled" -> null
+        }
+
+      - private_dns_name_options {
+          - enable_resource_name_dns_a_record    = false -> null
+          - enable_resource_name_dns_aaaa_record = false -> null
+          - hostname_type                        = "ip-name" -> null
+        }
+
+      - root_block_device {
+          - delete_on_termination = true -> null
+          - device_name           = "/dev/xvda" -> null
+          - encrypted             = true -> null
+          - iops                  = 3000 -> null
+          - kms_key_id            = "arn:aws:kms:us-east-1:377871695195:key/ecd1347f-c38a-4c7b-ae01-b02247724435" -> null
+          - tags                  = {} -> null
+          - tags_all              = {
+              - "ManagedBy" = "terraform"
+              - "Projeto"   = "prova-devops"
+            } -> null
+          - throughput            = 125 -> null
+          - volume_id             = "vol-0637b4fb6ce9d9c70" -> null
+          - volume_size           = 20 -> null
+          - volume_type           = "gp3" -> null
+        }
+    }
+
+  # module.rds.aws_db_instance.this will be destroyed
+  - resource "aws_db_instance" "this" {
+      - address                               = "prova-devops-postgres.cwaqxueqmojr.us-east-1.rds.amazonaws.com" -> null
+      - allocated_storage                     = 20 -> null
+      - apply_immediately                     = false -> null
+      - arn                                   = "arn:aws:rds:us-east-1:377871695195:db:prova-devops-postgres" -> null
+      - auto_minor_version_upgrade            = true -> null
+      - availability_zone                     = "us-east-1b" -> null
+      - backup_retention_period               = 1 -> null
+      - backup_target                         = "region" -> null
+      - backup_window                         = "05:28-05:58" -> null
+      - ca_cert_identifier                    = "rds-ca-rsa2048-g1" -> null
+      - copy_tags_to_snapshot                 = false -> null
+      - customer_owned_ip_enabled             = false -> null
+      - database_insights_mode                = "standard" -> null
+      - db_name                               = "reservas" -> null
+      - db_subnet_group_name                  = "prova-devops-db-subnet-group" -> null
+      - dedicated_log_volume                  = false -> null
+      - delete_automated_backups              = true -> null
+      - deletion_protection                   = false -> null
+      - domain_dns_ips                        = [] -> null
+      - enabled_cloudwatch_logs_exports       = [] -> null
+      - endpoint                              = "prova-devops-postgres.cwaqxueqmojr.us-east-1.rds.amazonaws.com:5432" -> null
+      - engine                                = "postgres" -> null
+      - engine_lifecycle_support              = "open-source-rds-extended-support" -> null
+      - engine_version                        = "16" -> null
+      - engine_version_actual                 = "16.13" -> null
+      - hosted_zone_id                        = "Z2R2ITUGPM61AM" -> null
+      - iam_database_authentication_enabled   = false -> null
+      - id                                    = "db-D2RUTSOCFPRQTXTXUBXU6CGJVQ" -> null
+      - identifier                            = "prova-devops-postgres" -> null
+      - instance_class                        = "db.t3.micro" -> null
+      - iops                                  = 3000 -> null
+      - kms_key_id                            = "arn:aws:kms:us-east-1:377871695195:key/56cdeafb-9f88-460d-bb86-cb8ce0b9f7a2" -> null
+      - latest_restorable_time                = "2026-10-02T00:26:12Z" -> null
+      - license_model                         = "postgresql-license" -> null
+      - listener_endpoint                     = [] -> null
+      - maintenance_window                    = "mon:07:25-mon:07:55" -> null
+      - master_user_secret                    = [] -> null
+      - max_allocated_storage                 = 0 -> null
+      - monitoring_interval                   = 0 -> null
+      - multi_az                              = false -> null
+      - network_type                          = "IPV4" -> null
+      - option_group_name                     = "default:postgres-16" -> null
+      - parameter_group_name                  = "default.postgres16" -> null
+      - password                              = (sensitive value) -> null
+      - password_wo                           = (write-only attribute) -> null
+      - performance_insights_enabled          = false -> null
+      - performance_insights_retention_period = 0 -> null
+      - port                                  = 5432 -> null
+      - publicly_accessible                   = false -> null
+      - replicas                              = [] -> null
+      - resource_id                           = "db-D2RUTSOCFPRQTXTXUBXU6CGJVQ" -> null
+      - skip_final_snapshot                   = true -> null
+      - status                                = "available" -> null
+      - storage_encrypted                     = true -> null
+      - storage_throughput                    = 125 -> null
+      - storage_type                          = "gp3" -> null
+      - tags                                  = {
+          - "Name" = "prova-devops-postgres"
+        } -> null
+      - tags_all                              = {
+          - "ManagedBy" = "terraform"
+          - "Name"      = "prova-devops-postgres"
+          - "Projeto"   = "prova-devops"
+        } -> null
+      - username                              = "reservas" -> null
+      - vpc_security_group_ids                = [
+          - "sg-0da2843a49d982abd",
+        ] -> null
+        # (14 unchanged attributes hidden)
+    }
+
+  # module.rds.aws_db_subnet_group.this will be destroyed
+  - resource "aws_db_subnet_group" "this" {
+      - arn                     = "arn:aws:rds:us-east-1:377871695195:subgrp:prova-devops-db-subnet-group" -> null
+      - description             = "Managed by Terraform" -> null
+      - id                      = "prova-devops-db-subnet-group" -> null
+      - name                    = "prova-devops-db-subnet-group" -> null
+      - subnet_ids              = [
+          - "subnet-020260fcf9bcaa3f2",
+          - "subnet-0a0383250485ae675",
+        ] -> null
+      - supported_network_types = [
+          - "IPV4",
+        ] -> null
+      - tags                    = {
+          - "Name" = "prova-devops-db-subnet-group"
+        } -> null
+      - tags_all                = {
+          - "ManagedBy" = "terraform"
+          - "Name"      = "prova-devops-db-subnet-group"
+          - "Projeto"   = "prova-devops"
+        } -> null
+      - vpc_id                  = "vpc-0a9ca6bee9ccb8368" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # module.security_group.aws_security_group.ec2 will be destroyed
+  - resource "aws_security_group" "ec2" {
+      - arn                    = "arn:aws:ec2:us-east-1:377871695195:security-group/sg-0d6a4b3a7ecdd7ac3" -> null
+      - description            = "Acesso a API de Reservas" -> null
+      - egress                 = [
+          - {
+              - cidr_blocks      = [
+                  - "0.0.0.0/0",
+                ]
+              - from_port        = 0
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "-1"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 0
+                # (1 unchanged attribute hidden)
+            },
+        ] -> null
+      - id                     = "sg-0d6a4b3a7ecdd7ac3" -> null
+      - ingress                = [
+          - {
+              - cidr_blocks      = [
+                  - "0.0.0.0/0",
+                ]
+              - description      = "API"
+              - from_port        = 3000
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "tcp"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 3000
+            },
+          - {
+              - cidr_blocks      = [
+                  - "45.175.114.197/32",
+                ]
+              - description      = "SSH"
+              - from_port        = 22
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "tcp"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 22
+            },
+        ] -> null
+      - name                   = "prova-devops-ec2-sg" -> null
+      - owner_id               = "377871695195" -> null
+      - revoke_rules_on_delete = false -> null
+      - tags                   = {
+          - "Name" = "prova-devops-ec2-sg"
+        } -> null
+      - tags_all               = {
+          - "ManagedBy" = "terraform"
+          - "Name"      = "prova-devops-ec2-sg"
+          - "Projeto"   = "prova-devops"
+        } -> null
+      - vpc_id                 = "vpc-0a9ca6bee9ccb8368" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # module.security_group.aws_security_group.rds will be destroyed
+  - resource "aws_security_group" "rds" {
+      - arn                    = "arn:aws:ec2:us-east-1:377871695195:security-group/sg-0da2843a49d982abd" -> null
+      - description            = "PostgreSQL acessivel apenas pela EC2" -> null
+      - egress                 = [
+          - {
+              - cidr_blocks      = [
+                  - "0.0.0.0/0",
+                ]
+              - from_port        = 0
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "-1"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 0
+                # (1 unchanged attribute hidden)
+            },
+        ] -> null
+      - id                     = "sg-0da2843a49d982abd" -> null
+      - ingress                = [
+          - {
+              - cidr_blocks      = []
+              - description      = "PostgreSQL vindo da EC2"
+              - from_port        = 5432
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "tcp"
+              - security_groups  = [
+                  - "sg-0d6a4b3a7ecdd7ac3",
+                ]
+              - self             = false
+              - to_port          = 5432
+            },
+        ] -> null
+      - name                   = "prova-devops-rds-sg" -> null
+      - owner_id               = "377871695195" -> null
+      - revoke_rules_on_delete = false -> null
+      - tags                   = {
+          - "Name" = "prova-devops-rds-sg"
+        } -> null
+      - tags_all               = {
+          - "ManagedBy" = "terraform"
+          - "Name"      = "prova-devops-rds-sg"
+          - "Projeto"   = "prova-devops"
+        } -> null
+      - vpc_id                 = "vpc-0a9ca6bee9ccb8368" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # module.vpc.aws_internet_gateway.this will be destroyed
+  - resource "aws_internet_gateway" "this" {
+      - arn      = "arn:aws:ec2:us-east-1:377871695195:internet-gateway/igw-0e7642495af94f777" -> null
+      - id       = "igw-0e7642495af94f777" -> null
+      - owner_id = "377871695195" -> null
+      - tags     = {
+          - "Name" = "prova-devops-igw"
+        } -> null
+      - tags_all = {
+          - "ManagedBy" = "terraform"
+          - "Name"      = "prova-devops-igw"
+          - "Projeto"   = "prova-devops"
+        } -> null
+      - vpc_id   = "vpc-0a9ca6bee9ccb8368" -> null
+    }
+
+  # module.vpc.aws_route_table.private will be destroyed
+  - resource "aws_route_table" "private" {
+      - arn              = "arn:aws:ec2:us-east-1:377871695195:route-table/rtb-00a32ee6c11909edb" -> null
+      - id               = "rtb-00a32ee6c11909edb" -> null
+      - owner_id         = "377871695195" -> null
+      - propagating_vgws = [] -> null
+      - route            = [] -> null
+      - tags             = {
+          - "Name" = "prova-devops-private-rt"
+        } -> null
+      - tags_all         = {
+          - "ManagedBy" = "terraform"
+          - "Name"      = "prova-devops-private-rt"
+          - "Projeto"   = "prova-devops"
+        } -> null
+      - vpc_id           = "vpc-0a9ca6bee9ccb8368" -> null
+    }
+
+  # module.vpc.aws_route_table.public will be destroyed
+  - resource "aws_route_table" "public" {
+      - arn              = "arn:aws:ec2:us-east-1:377871695195:route-table/rtb-0a28dad270350c568" -> null
+      - id               = "rtb-0a28dad270350c568" -> null
+      - owner_id         = "377871695195" -> null
+      - propagating_vgws = [] -> null
+      - route            = [
+          - {
+              - cidr_block                 = "0.0.0.0/0"
+              - gateway_id                 = "igw-0e7642495af94f777"
+                # (11 unchanged attributes hidden)
+            },
+        ] -> null
+      - tags             = {
+          - "Name" = "prova-devops-public-rt"
+        } -> null
+      - tags_all         = {
+          - "ManagedBy" = "terraform"
+          - "Name"      = "prova-devops-public-rt"
+          - "Projeto"   = "prova-devops"
+        } -> null
+      - vpc_id           = "vpc-0a9ca6bee9ccb8368" -> null
+    }
+
+  # module.vpc.aws_route_table_association.private[0] will be destroyed
+  - resource "aws_route_table_association" "private" {
+      - id             = "rtbassoc-0ae39f35d181546f2" -> null
+      - route_table_id = "rtb-00a32ee6c11909edb" -> null
+      - subnet_id      = "subnet-020260fcf9bcaa3f2" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # module.vpc.aws_route_table_association.private[1] will be destroyed
+  - resource "aws_route_table_association" "private" {
+      - id             = "rtbassoc-022366355a023a976" -> null
+      - route_table_id = "rtb-00a32ee6c11909edb" -> null
+      - subnet_id      = "subnet-0a0383250485ae675" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # module.vpc.aws_route_table_association.public[0] will be destroyed
+  - resource "aws_route_table_association" "public" {
+      - id             = "rtbassoc-063fe0680d3da714d" -> null
+      - route_table_id = "rtb-0a28dad270350c568" -> null
+      - subnet_id      = "subnet-0d3e21cb9d5f9c28c" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # module.vpc.aws_route_table_association.public[1] will be destroyed
+  - resource "aws_route_table_association" "public" {
+      - id             = "rtbassoc-054ca753a678d2912" -> null
+      - route_table_id = "rtb-0a28dad270350c568" -> null
+      - subnet_id      = "subnet-00a6ee8a233743d6e" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # module.vpc.aws_subnet.private[0] will be destroyed
+  - resource "aws_subnet" "private" {
+      - arn                                            = "arn:aws:ec2:us-east-1:377871695195:subnet/subnet-020260fcf9bcaa3f2" -> null
+      - assign_ipv6_address_on_creation                = false -> null
+      - availability_zone                              = "us-east-1a" -> null
+      - availability_zone_id                           = "use1-az2" -> null
+      - cidr_block                                     = "10.0.11.0/24" -> null
+      - enable_dns64                                   = false -> null
+      - enable_lni_at_device_index                     = 0 -> null
+      - enable_resource_name_dns_a_record_on_launch    = false -> null
+      - enable_resource_name_dns_aaaa_record_on_launch = false -> null
+      - id                                             = "subnet-020260fcf9bcaa3f2" -> null
+      - ipv6_native                                    = false -> null
+      - map_customer_owned_ip_on_launch                = false -> null
+      - map_public_ip_on_launch                        = false -> null
+      - owner_id                                       = "377871695195" -> null
+      - private_dns_hostname_type_on_launch            = "ip-name" -> null
+      - tags                                           = {
+          - "Name" = "prova-devops-private-1"
+        } -> null
+      - tags_all                                       = {
+          - "ManagedBy" = "terraform"
+          - "Name"      = "prova-devops-private-1"
+          - "Projeto"   = "prova-devops"
+        } -> null
+      - vpc_id                                         = "vpc-0a9ca6bee9ccb8368" -> null
+        # (4 unchanged attributes hidden)
+    }
+
+  # module.vpc.aws_subnet.private[1] will be destroyed
+  - resource "aws_subnet" "private" {
+      - arn                                            = "arn:aws:ec2:us-east-1:377871695195:subnet/subnet-0a0383250485ae675" -> null
+      - assign_ipv6_address_on_creation                = false -> null
+      - availability_zone                              = "us-east-1b" -> null
+      - availability_zone_id                           = "use1-az4" -> null
+      - cidr_block                                     = "10.0.12.0/24" -> null
+      - enable_dns64                                   = false -> null
+      - enable_lni_at_device_index                     = 0 -> null
+      - enable_resource_name_dns_a_record_on_launch    = false -> null
+      - enable_resource_name_dns_aaaa_record_on_launch = false -> null
+      - id                                             = "subnet-0a0383250485ae675" -> null
+      - ipv6_native                                    = false -> null
+      - map_customer_owned_ip_on_launch                = false -> null
+      - map_public_ip_on_launch                        = false -> null
+      - owner_id                                       = "377871695195" -> null
+      - private_dns_hostname_type_on_launch            = "ip-name" -> null
+      - tags                                           = {
+          - "Name" = "prova-devops-private-2"
+        } -> null
+      - tags_all                                       = {
+          - "ManagedBy" = "terraform"
+          - "Name"      = "prova-devops-private-2"
+          - "Projeto"   = "prova-devops"
+        } -> null
+      - vpc_id                                         = "vpc-0a9ca6bee9ccb8368" -> null
+        # (4 unchanged attributes hidden)
+    }
+
+  # module.vpc.aws_subnet.public[0] will be destroyed
+  - resource "aws_subnet" "public" {
+      - arn                                            = "arn:aws:ec2:us-east-1:377871695195:subnet/subnet-0d3e21cb9d5f9c28c" -> null
+      - assign_ipv6_address_on_creation                = false -> null
+      - availability_zone                              = "us-east-1a" -> null
+      - availability_zone_id                           = "use1-az2" -> null
+      - cidr_block                                     = "10.0.1.0/24" -> null
+      - enable_dns64                                   = false -> null
+      - enable_lni_at_device_index                     = 0 -> null
+      - enable_resource_name_dns_a_record_on_launch    = false -> null
+      - enable_resource_name_dns_aaaa_record_on_launch = false -> null
+      - id                                             = "subnet-0d3e21cb9d5f9c28c" -> null
+      - ipv6_native                                    = false -> null
+      - map_customer_owned_ip_on_launch                = false -> null
+      - map_public_ip_on_launch                        = true -> null
+      - owner_id                                       = "377871695195" -> null
+      - private_dns_hostname_type_on_launch            = "ip-name" -> null
+      - tags                                           = {
+          - "Name" = "prova-devops-public-1"
+        } -> null
+      - tags_all                                       = {
+          - "ManagedBy" = "terraform"
+          - "Name"      = "prova-devops-public-1"
+          - "Projeto"   = "prova-devops"
+        } -> null
+      - vpc_id                                         = "vpc-0a9ca6bee9ccb8368" -> null
+        # (4 unchanged attributes hidden)
+    }
+
+  # module.vpc.aws_subnet.public[1] will be destroyed
+  - resource "aws_subnet" "public" {
+      - arn                                            = "arn:aws:ec2:us-east-1:377871695195:subnet/subnet-00a6ee8a233743d6e" -> null
+      - assign_ipv6_address_on_creation                = false -> null
+      - availability_zone                              = "us-east-1b" -> null
+      - availability_zone_id                           = "use1-az4" -> null
+      - cidr_block                                     = "10.0.2.0/24" -> null
+      - enable_dns64                                   = false -> null
+      - enable_lni_at_device_index                     = 0 -> null
+      - enable_resource_name_dns_a_record_on_launch    = false -> null
+      - enable_resource_name_dns_aaaa_record_on_launch = false -> null
+      - id                                             = "subnet-00a6ee8a233743d6e" -> null
+      - ipv6_native                                    = false -> null
+      - map_customer_owned_ip_on_launch                = false -> null
+      - map_public_ip_on_launch                        = true -> null
+      - owner_id                                       = "377871695195" -> null
+      - private_dns_hostname_type_on_launch            = "ip-name" -> null
+      - tags                                           = {
+          - "Name" = "prova-devops-public-2"
+        } -> null
+      - tags_all                                       = {
+          - "ManagedBy" = "terraform"
+          - "Name"      = "prova-devops-public-2"
+          - "Projeto"   = "prova-devops"
+        } -> null
+      - vpc_id                                         = "vpc-0a9ca6bee9ccb8368" -> null
+        # (4 unchanged attributes hidden)
+    }
+
+  # module.vpc.aws_vpc.this will be destroyed
+  - resource "aws_vpc" "this" {
+      - arn                                  = "arn:aws:ec2:us-east-1:377871695195:vpc/vpc-0a9ca6bee9ccb8368" -> null
+      - assign_generated_ipv6_cidr_block     = false -> null
+      - cidr_block                           = "10.0.0.0/16" -> null
+      - default_network_acl_id               = "acl-0dcc074abbd91d721" -> null
+      - default_route_table_id               = "rtb-0d3f7432be16aadc0" -> null
+      - default_security_group_id            = "sg-0fb1285828c2691a3" -> null
+      - dhcp_options_id                      = "dopt-0f7c4a8be0ef450f5" -> null
+      - enable_dns_hostnames                 = true -> null
+      - enable_dns_support                   = true -> null
+      - enable_network_address_usage_metrics = false -> null
+      - id                                   = "vpc-0a9ca6bee9ccb8368" -> null
+      - instance_tenancy                     = "default" -> null
+      - ipv6_netmask_length                  = 0 -> null
+      - main_route_table_id                  = "rtb-0d3f7432be16aadc0" -> null
+      - owner_id                             = "377871695195" -> null
+      - tags                                 = {
+          - "Name" = "prova-devops-vpc"
+        } -> null
+      - tags_all                             = {
+          - "ManagedBy" = "terraform"
+          - "Name"      = "prova-devops-vpc"
+          - "Projeto"   = "prova-devops"
+        } -> null
+        # (4 unchanged attributes hidden)
+    }
+
+Plan: 0 to add, 0 to change, 17 to destroy.
+
+Changes to Outputs:
+  - api_url       = "http://ec2-3-86-96-150.compute-1.amazonaws.com:3000" -> null
+  - ec2_public_ip = "3.86.96.150" -> null
+  - rds_endpoint  = "prova-devops-postgres.cwaqxueqmojr.us-east-1.rds.amazonaws.com:5432" -> null
+  - vpc_id        = "vpc-0a9ca6bee9ccb8368" -> null
+module.vpc.aws_route_table_association.private[0]: Destroying... [id=rtbassoc-0ae39f35d181546f2]
+module.vpc.aws_route_table_association.private[1]: Destroying... [id=rtbassoc-022366355a023a976]
+module.vpc.aws_route_table_association.public[0]: Destroying... [id=rtbassoc-063fe0680d3da714d]
+module.vpc.aws_route_table_association.public[1]: Destroying... [id=rtbassoc-054ca753a678d2912]
+module.ec2.aws_instance.this: Destroying... [id=i-042035045c988d699]
+module.vpc.aws_route_table_association.private[0]: Destruction complete after 2s
+module.vpc.aws_route_table_association.public[0]: Destruction complete after 2s
+module.vpc.aws_route_table_association.private[1]: Destruction complete after 2s
+module.vpc.aws_route_table.private: Destroying... [id=rtb-00a32ee6c11909edb]
+module.vpc.aws_route_table_association.public[1]: Destruction complete after 2s
+module.vpc.aws_route_table.public: Destroying... [id=rtb-0a28dad270350c568]
+module.vpc.aws_route_table.private: Destruction complete after 1s
+module.vpc.aws_route_table.public: Destruction complete after 1s
+module.vpc.aws_internet_gateway.this: Destroying... [id=igw-0e7642495af94f777]
+module.ec2.aws_instance.this: Still destroying... [id=i-042035045c988d699, 00m10s elapsed]
+module.vpc.aws_internet_gateway.this: Still destroying... [id=igw-0e7642495af94f777, 00m10s elapsed]
+module.ec2.aws_instance.this: Still destroying... [id=i-042035045c988d699, 00m20s elapsed]
+module.vpc.aws_internet_gateway.this: Destruction complete after 19s
+module.ec2.aws_instance.this: Still destroying... [id=i-042035045c988d699, 00m30s elapsed]
+module.ec2.aws_instance.this: Destruction complete after 32s
+module.vpc.aws_subnet.public[1]: Destroying... [id=subnet-00a6ee8a233743d6e]
+module.vpc.aws_subnet.public[0]: Destroying... [id=subnet-0d3e21cb9d5f9c28c]
+module.rds.aws_db_instance.this: Destroying... [id=db-D2RUTSOCFPRQTXTXUBXU6CGJVQ]
+module.vpc.aws_subnet.public[1]: Destruction complete after 1s
+module.vpc.aws_subnet.public[0]: Destruction complete after 1s
+module.rds.aws_db_instance.this: Still destroying... [id=db-D2RUTSOCFPRQTXTXUBXU6CGJVQ, 00m10s elapsed]
+module.rds.aws_db_instance.this: Still destroying... [id=db-D2RUTSOCFPRQTXTXUBXU6CGJVQ, 00m20s elapsed]
+module.rds.aws_db_instance.this: Still destroying... [id=db-D2RUTSOCFPRQTXTXUBXU6CGJVQ, 00m30s elapsed]
+module.rds.aws_db_instance.this: Still destroying... [id=db-D2RUTSOCFPRQTXTXUBXU6CGJVQ, 00m40s elapsed]
+module.rds.aws_db_instance.this: Still destroying... [id=db-D2RUTSOCFPRQTXTXUBXU6CGJVQ, 00m50s elapsed]
+module.rds.aws_db_instance.this: Still destroying... [id=db-D2RUTSOCFPRQTXTXUBXU6CGJVQ, 01m00s elapsed]
+module.rds.aws_db_instance.this: Still destroying... [id=db-D2RUTSOCFPRQTXTXUBXU6CGJVQ, 01m10s elapsed]
+module.rds.aws_db_instance.this: Still destroying... [id=db-D2RUTSOCFPRQTXTXUBXU6CGJVQ, 01m20s elapsed]
+module.rds.aws_db_instance.this: Still destroying... [id=db-D2RUTSOCFPRQTXTXUBXU6CGJVQ, 01m30s elapsed]
+module.rds.aws_db_instance.this: Still destroying... [id=db-D2RUTSOCFPRQTXTXUBXU6CGJVQ, 01m40s elapsed]
+module.rds.aws_db_instance.this: Still destroying... [id=db-D2RUTSOCFPRQTXTXUBXU6CGJVQ, 01m50s elapsed]
+module.rds.aws_db_instance.this: Destruction complete after 1m54s
+module.rds.aws_db_subnet_group.this: Destroying... [id=prova-devops-db-subnet-group]
+module.security_group.aws_security_group.rds: Destroying... [id=sg-0da2843a49d982abd]
+module.rds.aws_db_subnet_group.this: Destruction complete after 0s
+module.vpc.aws_subnet.private[0]: Destroying... [id=subnet-020260fcf9bcaa3f2]
+module.vpc.aws_subnet.private[1]: Destroying... [id=subnet-0a0383250485ae675]
+module.vpc.aws_subnet.private[0]: Destruction complete after 2s
+module.vpc.aws_subnet.private[1]: Destruction complete after 2s
+module.security_group.aws_security_group.rds: Destruction complete after 2s
+module.security_group.aws_security_group.ec2: Destroying... [id=sg-0d6a4b3a7ecdd7ac3]
+module.security_group.aws_security_group.ec2: Destruction complete after 1s
+module.vpc.aws_vpc.this: Destroying... [id=vpc-0a9ca6bee9ccb8368]
+module.vpc.aws_vpc.this: Destruction complete after 1s
+
+Destroy complete! Resources: 17 destroyed.
+exit=0

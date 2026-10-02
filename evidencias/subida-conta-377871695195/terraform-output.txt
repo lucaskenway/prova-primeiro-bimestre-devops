@@ -1,0 +1,11 @@
+# terraform output — 2026-10-02 00:25 UTC (conta 377871695195)
+$ cd infra && terraform output
+api_url = "http://ec2-3-86-96-150.compute-1.amazonaws.com:3000"
+ec2_public_ip = "3.86.96.150"
+rds_endpoint = "prova-devops-postgres.cwaqxueqmojr.us-east-1.rds.amazonaws.com:5432"
+vpc_id = "vpc-0a9ca6bee9ccb8368"
+
+Warning: Deprecated Parameter
+
+The parameter "dynamodb_table" is deprecated. Use parameter "use_lockfile"
+instead.

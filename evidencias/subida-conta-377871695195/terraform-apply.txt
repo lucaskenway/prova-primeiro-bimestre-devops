@@ -1,0 +1,94 @@
+# terraform apply — conta 377871695195 (registro fiel do que aconteceu)
+#
+# 1) Primeiro apply: criou 15 recursos; o RDS ficou pronto na AWS às 23:12 UTC, mas o computador entrou em
+#    suspensão e o Terraform ficou preso em 'Still creating'. Foi interrompido com Ctrl+C (SIGINT), salvando o state.
+# 2) O RDS ficou marcado como 'tainted'; como estava 'available' na AWS, foi feito 'terraform untaint'.
+# 3) Segundo apply: criou só a EC2 (1 added). Linhas repetidas de 'Still creating' do RDS foram resumidas.
+
+## 1) Primeiro apply
+$ terraform apply prova.tfplan
+
+Warning: Deprecated Parameter
+
+The parameter "dynamodb_table" is deprecated. Use parameter "use_lockfile"
+instead.
+Acquiring state lock. This may take a few moments...
+module.vpc.aws_vpc.this: Creating...
+module.vpc.aws_vpc.this: Still creating... [00m10s elapsed]
+module.vpc.aws_vpc.this: Creation complete after 15s [id=vpc-0a9ca6bee9ccb8368]
+module.vpc.aws_internet_gateway.this: Creating...
+module.vpc.aws_subnet.public[0]: Creating...
+module.vpc.aws_subnet.private[0]: Creating...
+module.vpc.aws_subnet.public[1]: Creating...
+module.vpc.aws_subnet.private[1]: Creating...
+module.vpc.aws_route_table.private: Creating...
+module.security_group.aws_security_group.ec2: Creating...
+module.vpc.aws_subnet.private[0]: Creation complete after 2s [id=subnet-020260fcf9bcaa3f2]
+module.vpc.aws_internet_gateway.this: Creation complete after 2s [id=igw-0e7642495af94f777]
+module.vpc.aws_route_table.public: Creating...
+module.vpc.aws_subnet.private[1]: Creation complete after 2s [id=subnet-0a0383250485ae675]
+module.vpc.aws_route_table.private: Creation complete after 2s [id=rtb-00a32ee6c11909edb]
+module.rds.aws_db_subnet_group.this: Creating...
+module.vpc.aws_route_table_association.private[0]: Creating...
+module.vpc.aws_route_table_association.private[1]: Creating...
+module.vpc.aws_route_table_association.private[0]: Creation complete after 1s [id=rtbassoc-0ae39f35d181546f2]
+module.vpc.aws_route_table_association.private[1]: Creation complete after 1s [id=rtbassoc-022366355a023a976]
+module.vpc.aws_route_table.public: Creation complete after 1s [id=rtb-0a28dad270350c568]
+module.security_group.aws_security_group.ec2: Creation complete after 4s [id=sg-0d6a4b3a7ecdd7ac3]
+module.security_group.aws_security_group.rds: Creating...
+module.rds.aws_db_subnet_group.this: Creation complete after 2s [id=prova-devops-db-subnet-group]
+module.security_group.aws_security_group.rds: Creation complete after 4s [id=sg-0da2843a49d982abd]
+module.rds.aws_db_instance.this: Creating...
+module.vpc.aws_subnet.public[0]: Still creating... [00m10s elapsed]
+module.vpc.aws_subnet.public[1]: Still creating... [00m10s elapsed]
+module.vpc.aws_subnet.public[0]: Creation complete after 12s [id=subnet-0d3e21cb9d5f9c28c]
+module.vpc.aws_subnet.public[1]: Creation complete after 15s [id=subnet-00a6ee8a233743d6e]
+module.vpc.aws_route_table_association.public[1]: Creating...
+module.vpc.aws_route_table_association.public[0]: Creating...
+module.vpc.aws_route_table_association.public[1]: Creation complete after 1s [id=rtbassoc-054ca753a678d2912]
+module.vpc.aws_route_table_association.public[0]: Creation complete after 1s [id=rtbassoc-063fe0680d3da714d]
+[... 71 linhas "Still creating" do RDS omitidas; última: module.rds.aws_db_instance.this: Still creating... [62m47s elapsed] ...]
+Stopping operation...
+
+Interrupt received.
+Please wait for Terraform to exit or data loss may occur.
+Gracefully shutting down...
+
+
+Error: execution halted
+
+
+Error: waiting for RDS DB Instance (prova-devops-postgres) create: context canceled
+
+  with module.rds.aws_db_instance.this,
+  on modules/rds/main.tf line 7, in resource "aws_db_instance" "this":
+   7: resource "aws_db_instance" "this" {
+
+Releasing state lock. This may take a few moments...
+
+## 2) untaint e novo plano
+  Resource instance module.rds.aws_db_instance.this has been successfully untainted.
+  # module.ec2.aws_instance.this will be created
+  Plan: 1 to add, 0 to change, 0 to destroy.
+
+## 3) Segundo apply
+$ terraform apply prova.tfplan
+
+Warning: Deprecated Parameter
+
+The parameter "dynamodb_table" is deprecated. Use parameter "use_lockfile"
+instead.
+Acquiring state lock. This may take a few moments...
+module.ec2.aws_instance.this: Creating...
+module.ec2.aws_instance.this: Still creating... [00m10s elapsed]
+module.ec2.aws_instance.this: Creation complete after 16s [id=i-042035045c988d699]
+Releasing state lock. This may take a few moments...
+
+Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+api_url = "http://ec2-3-86-96-150.compute-1.amazonaws.com:3000"
+ec2_public_ip = "3.86.96.150"
+rds_endpoint = "prova-devops-postgres.cwaqxueqmojr.us-east-1.rds.amazonaws.com:5432"
+vpc_id = "vpc-0a9ca6bee9ccb8368"

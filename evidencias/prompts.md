@@ -485,3 +485,42 @@ A conversa completa, com as respostas da IA, está em [`conversa-completa.md`](c
 39. **01/10 18:59** — já terminou o destroy?
 40. **01/10 19:00** — já terminou o destroy?
 41. **01/10 19:01** — pode fazer o 2 e o 3
+42. **01/10 19:03** — eu quero subri e tira os print
+43. **01/10 19:03** — já terminou o apply?
+44. **01/10 19:03** — já terminou o apply?
+45. **01/10 19:05** — já terminou o apply?
+46. **01/10 19:05** — eu querio eu vc trira os print
+47. **01/10 19:06** — me manda os comandos para treminal no vs code
+48. **01/10 19:11** — [credenciais AWS coladas — omitidas por segurança]
+49. **01/10 19:18** — [credenciais AWS coladas — omitidas por segurança]
+50. **01/10 19:19** — me manda os comandos
+51. **01/10 19:20** — [colou o erro do terminal: `api error AccessDenied ... StatusCode: 403` ao aplicar o backend S3]
+52. **01/10 19:20** — roda o terraform
+53. **01/10 19:26** — [Image #11] colocar na evidecias
+54. **01/10 19:26** — [Image #12]
+55. **01/10 19:32** — [credenciais AWS coladas — omitidas por segurança]
+56. **01/10 19:33** — muda para subri pq aws deu ruim
+57. **01/10 19:48** — tira os pints e so deixa os txt
+58. **01/10 19:56** — [credenciais AWS coladas — omitidas por segurança]
+59. **01/10 19:57** — [credenciais AWS coladas — omitidas por segurança]
+60. **01/10 20:04** — já terminou o apply?
+61. **01/10 20:06** — já terminou o apply?
+62. **01/10 20:06** — já terminou o apply?
+63. **01/10 20:09** — já terminou o apply?
+64. **01/10 20:10** — já terminou o apply?
+65. **01/10 20:11** — já terminou o apply?
+66. **01/10 21:08** — já terminou o apply?
+67. **01/10 21:10** — já terminou o apply?
+68. **01/10 21:10** — já terminou o apply?
+69. **01/10 21:14** — já terminou o apply?
+70. **01/10 21:15** — já terminou o apply?
+71. **01/10 21:17** — já terminou o apply?
+72. **01/10 21:22** — gera as evidências dessa subida
+73. **01/10 21:24** — pq o - http://3.86.96.150:3000/reservas (vazio, [], porque o banco é novo) cade o o banco
+74. **01/10 21:24** — [credenciais AWS coladas — omitidas por segurança]
+75. **01/10 21:25** — gera as evidências
+76. **01/10 21:28** — pode fazer o terraform destroy
+77. **01/10 21:28** — já terminou o destroy?
+78. **01/10 21:29** — já terminou o destroy?
+79. **01/10 21:30** — já terminou o destroy?
+80. **01/10 21:34** — pega os resudatos e colocar em txt do novos e dps faz o pr mais nao coloca vc no pr

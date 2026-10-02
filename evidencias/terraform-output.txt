@@ -1,9 +1,9 @@
-# terraform output — 2026-10-01 16:55 UTC
+# terraform output — 2026-10-02 00:25 UTC (conta 377871695195)
 $ cd infra && terraform output
-api_url = "http://ec2-44-193-223-249.compute-1.amazonaws.com:3000"
-ec2_public_ip = "44.193.223.249"
-rds_endpoint = "prova-devops-postgres.cumscnwfheb2.us-east-1.rds.amazonaws.com:5432"
-vpc_id = "vpc-0b04e2b45dbdc3b7b"
+api_url = "http://ec2-3-86-96-150.compute-1.amazonaws.com:3000"
+ec2_public_ip = "3.86.96.150"
+rds_endpoint = "prova-devops-postgres.cwaqxueqmojr.us-east-1.rds.amazonaws.com:5432"
+vpc_id = "vpc-0a9ca6bee9ccb8368"
 
 Warning: Deprecated Parameter
 

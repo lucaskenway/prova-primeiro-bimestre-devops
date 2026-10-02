@@ -1,5 +1,5 @@
-# terraform plan — 2026-10-01 16:39 UTC (Learner Lab, us-east-1)
-# AMI escolhida: ami-03c3da4cfa8e8943a = al2023-ami-2023.12.20260930.0-kernel-6.1-x86_64 (Amazon Linux 2023 padrão)
+# terraform plan — conta 377871695195, backend no bucket prova-devops-tfstate-6325226-b
+$ cd infra && terraform init -reconfigure -backend-config="bucket=prova-devops-tfstate-6325226-b"
 $ cd infra && terraform plan
 
 Warning: Deprecated Parameter
@@ -9,8 +9,8 @@ instead.
 Acquiring state lock. This may take a few moments...
 module.vpc.data.aws_availability_zones.available: Reading...
 module.ec2.data.aws_ami.al2023: Reading...
-module.vpc.data.aws_availability_zones.available: Read complete after 1s [id=us-east-1]
-module.ec2.data.aws_ami.al2023: Read complete after 2s [id=ami-03c3da4cfa8e8943a]
+module.vpc.data.aws_availability_zones.available: Read complete after 0s [id=us-east-1]
+module.ec2.data.aws_ami.al2023: Read complete after 1s [id=ami-03c3da4cfa8e8943a]
 
 Terraform used the selected providers to generate the following execution
 plan. Resource actions are indicated with the following symbols:
@@ -549,6 +549,9 @@ Changes to Outputs:
 
 ─────────────────────────────────────────────────────────────────────────────
 
-Note: You didn't use the -out option to save this plan, so Terraform can't
-guarantee to take exactly these actions if you run "terraform apply" now.
+Saved the plan to:
+/tmp/claude-1000/-mnt-c-Users-lucas-prova-primeiro-bimestre-devops/062aefa4-8b03-42ff-8693-c26921886161/scratchpad/prova3.tfplan
+
+To perform exactly these actions, run the following command to apply:
+    terraform apply "/tmp/claude-1000/-mnt-c-Users-lucas-prova-primeiro-bimestre-devops/062aefa4-8b03-42ff-8693-c26921886161/scratchpad/prova3.tfplan"
 Releasing state lock. This may take a few moments...

@@ -1,5 +1,12 @@
-# terraform apply — 2026-10-01 16:55 UTC (aplicado o plano salvo, igual ao terraform-plan.txt)
-$ cd infra && terraform apply prova.tfplan
+# terraform apply — conta 377871695195 (registro fiel do que aconteceu)
+#
+# 1) Primeiro apply: criou 15 recursos; o RDS ficou pronto na AWS às 23:12 UTC, mas o computador entrou em
+#    suspensão e o Terraform ficou preso em 'Still creating'. Foi interrompido com Ctrl+C (SIGINT), salvando o state.
+# 2) O RDS ficou marcado como 'tainted'; como estava 'available' na AWS, foi feito 'terraform untaint'.
+# 3) Segundo apply: criou só a EC2 (1 added). Linhas repetidas de 'Still creating' do RDS foram resumidas.
+
+## 1) Primeiro apply
+$ terraform apply prova.tfplan
 
 Warning: Deprecated Parameter
 
@@ -8,86 +15,80 @@ instead.
 Acquiring state lock. This may take a few moments...
 module.vpc.aws_vpc.this: Creating...
 module.vpc.aws_vpc.this: Still creating... [00m10s elapsed]
-module.vpc.aws_vpc.this: Creation complete after 14s [id=vpc-0b04e2b45dbdc3b7b]
+module.vpc.aws_vpc.this: Creation complete after 15s [id=vpc-0a9ca6bee9ccb8368]
 module.vpc.aws_internet_gateway.this: Creating...
 module.vpc.aws_subnet.public[0]: Creating...
+module.vpc.aws_subnet.private[0]: Creating...
 module.vpc.aws_subnet.public[1]: Creating...
 module.vpc.aws_subnet.private[1]: Creating...
-module.vpc.aws_subnet.private[0]: Creating...
 module.vpc.aws_route_table.private: Creating...
 module.security_group.aws_security_group.ec2: Creating...
-module.vpc.aws_subnet.private[0]: Creation complete after 1s [id=subnet-0126506d295b18096]
-module.vpc.aws_internet_gateway.this: Creation complete after 1s [id=igw-07412a403884c70d4]
+module.vpc.aws_subnet.private[0]: Creation complete after 2s [id=subnet-020260fcf9bcaa3f2]
+module.vpc.aws_internet_gateway.this: Creation complete after 2s [id=igw-0e7642495af94f777]
 module.vpc.aws_route_table.public: Creating...
-module.vpc.aws_subnet.private[1]: Creation complete after 1s [id=subnet-0336271c823f1611c]
+module.vpc.aws_subnet.private[1]: Creation complete after 2s [id=subnet-0a0383250485ae675]
+module.vpc.aws_route_table.private: Creation complete after 2s [id=rtb-00a32ee6c11909edb]
 module.rds.aws_db_subnet_group.this: Creating...
-module.vpc.aws_route_table.private: Creation complete after 2s [id=rtb-05df41dc0e65f8180]
 module.vpc.aws_route_table_association.private[0]: Creating...
 module.vpc.aws_route_table_association.private[1]: Creating...
-module.vpc.aws_route_table_association.private[0]: Creation complete after 0s [id=rtbassoc-038ac9d32e74c79a3]
-module.vpc.aws_route_table_association.private[1]: Creation complete after 0s [id=rtbassoc-08c6f8b596c7731ee]
-module.vpc.aws_route_table.public: Creation complete after 2s [id=rtb-0672b5de688692286]
-module.rds.aws_db_subnet_group.this: Creation complete after 2s [id=prova-devops-db-subnet-group]
-module.security_group.aws_security_group.ec2: Creation complete after 4s [id=sg-0650cc6fa7268a22a]
+module.vpc.aws_route_table_association.private[0]: Creation complete after 1s [id=rtbassoc-0ae39f35d181546f2]
+module.vpc.aws_route_table_association.private[1]: Creation complete after 1s [id=rtbassoc-022366355a023a976]
+module.vpc.aws_route_table.public: Creation complete after 1s [id=rtb-0a28dad270350c568]
+module.security_group.aws_security_group.ec2: Creation complete after 4s [id=sg-0d6a4b3a7ecdd7ac3]
 module.security_group.aws_security_group.rds: Creating...
-module.security_group.aws_security_group.rds: Creation complete after 4s [id=sg-039dcfa37220f96bc]
+module.rds.aws_db_subnet_group.this: Creation complete after 2s [id=prova-devops-db-subnet-group]
+module.security_group.aws_security_group.rds: Creation complete after 4s [id=sg-0da2843a49d982abd]
 module.rds.aws_db_instance.this: Creating...
-module.vpc.aws_subnet.public[1]: Still creating... [00m10s elapsed]
 module.vpc.aws_subnet.public[0]: Still creating... [00m10s elapsed]
-module.vpc.aws_subnet.public[1]: Creation complete after 12s [id=subnet-0abb0f80c3af103b8]
-module.vpc.aws_subnet.public[0]: Creation complete after 15s [id=subnet-06463fbe98c46079f]
-module.vpc.aws_route_table_association.public[0]: Creating...
+module.vpc.aws_subnet.public[1]: Still creating... [00m10s elapsed]
+module.vpc.aws_subnet.public[0]: Creation complete after 12s [id=subnet-0d3e21cb9d5f9c28c]
+module.vpc.aws_subnet.public[1]: Creation complete after 15s [id=subnet-00a6ee8a233743d6e]
 module.vpc.aws_route_table_association.public[1]: Creating...
-module.vpc.aws_route_table_association.public[0]: Creation complete after 0s [id=rtbassoc-06195eb599edefd36]
-module.vpc.aws_route_table_association.public[1]: Creation complete after 0s [id=rtbassoc-0a6f737f4e25b1dc1]
-module.rds.aws_db_instance.this: Still creating... [00m10s elapsed]
-module.rds.aws_db_instance.this: Still creating... [00m20s elapsed]
-module.rds.aws_db_instance.this: Still creating... [00m30s elapsed]
-module.rds.aws_db_instance.this: Still creating... [00m40s elapsed]
-module.rds.aws_db_instance.this: Still creating... [00m50s elapsed]
-module.rds.aws_db_instance.this: Still creating... [01m00s elapsed]
-module.rds.aws_db_instance.this: Still creating... [01m10s elapsed]
-module.rds.aws_db_instance.this: Still creating... [01m20s elapsed]
-module.rds.aws_db_instance.this: Still creating... [01m30s elapsed]
-module.rds.aws_db_instance.this: Still creating... [01m40s elapsed]
-module.rds.aws_db_instance.this: Still creating... [01m50s elapsed]
-module.rds.aws_db_instance.this: Still creating... [02m00s elapsed]
-module.rds.aws_db_instance.this: Still creating... [02m10s elapsed]
-module.rds.aws_db_instance.this: Still creating... [02m20s elapsed]
-module.rds.aws_db_instance.this: Still creating... [02m30s elapsed]
-module.rds.aws_db_instance.this: Still creating... [02m40s elapsed]
-module.rds.aws_db_instance.this: Still creating... [02m50s elapsed]
-module.rds.aws_db_instance.this: Still creating... [03m00s elapsed]
-module.rds.aws_db_instance.this: Still creating... [03m10s elapsed]
-module.rds.aws_db_instance.this: Still creating... [03m20s elapsed]
-module.rds.aws_db_instance.this: Still creating... [03m30s elapsed]
-module.rds.aws_db_instance.this: Still creating... [03m40s elapsed]
-module.rds.aws_db_instance.this: Still creating... [03m50s elapsed]
-module.rds.aws_db_instance.this: Still creating... [04m00s elapsed]
-module.rds.aws_db_instance.this: Still creating... [04m10s elapsed]
-module.rds.aws_db_instance.this: Still creating... [04m20s elapsed]
-module.rds.aws_db_instance.this: Still creating... [04m30s elapsed]
-module.rds.aws_db_instance.this: Still creating... [04m40s elapsed]
-module.rds.aws_db_instance.this: Still creating... [04m50s elapsed]
-module.rds.aws_db_instance.this: Still creating... [05m00s elapsed]
-module.rds.aws_db_instance.this: Still creating... [05m10s elapsed]
-module.rds.aws_db_instance.this: Still creating... [05m20s elapsed]
-module.rds.aws_db_instance.this: Still creating... [05m30s elapsed]
-module.rds.aws_db_instance.this: Still creating... [05m40s elapsed]
-module.rds.aws_db_instance.this: Still creating... [05m50s elapsed]
-module.rds.aws_db_instance.this: Still creating... [06m00s elapsed]
-module.rds.aws_db_instance.this: Still creating... [06m10s elapsed]
-module.rds.aws_db_instance.this: Still creating... [06m20s elapsed]
-module.rds.aws_db_instance.this: Creation complete after 6m22s [id=db-LFJGAEF2HSXX62TBR2IAPJ5S5E]
+module.vpc.aws_route_table_association.public[0]: Creating...
+module.vpc.aws_route_table_association.public[1]: Creation complete after 1s [id=rtbassoc-054ca753a678d2912]
+module.vpc.aws_route_table_association.public[0]: Creation complete after 1s [id=rtbassoc-063fe0680d3da714d]
+[... 71 linhas "Still creating" do RDS omitidas; última: module.rds.aws_db_instance.this: Still creating... [62m47s elapsed] ...]
+Stopping operation...
+
+Interrupt received.
+Please wait for Terraform to exit or data loss may occur.
+Gracefully shutting down...
+
+
+Error: execution halted
+
+
+Error: waiting for RDS DB Instance (prova-devops-postgres) create: context canceled
+
+  with module.rds.aws_db_instance.this,
+  on modules/rds/main.tf line 7, in resource "aws_db_instance" "this":
+   7: resource "aws_db_instance" "this" {
+
+Releasing state lock. This may take a few moments...
+
+## 2) untaint e novo plano
+  Resource instance module.rds.aws_db_instance.this has been successfully untainted.
+  # module.ec2.aws_instance.this will be created
+  Plan: 1 to add, 0 to change, 0 to destroy.
+
+## 3) Segundo apply
+$ terraform apply prova.tfplan
+
+Warning: Deprecated Parameter
+
+The parameter "dynamodb_table" is deprecated. Use parameter "use_lockfile"
+instead.
+Acquiring state lock. This may take a few moments...
 module.ec2.aws_instance.this: Creating...
 module.ec2.aws_instance.this: Still creating... [00m10s elapsed]
-module.ec2.aws_instance.this: Creation complete after 15s [id=i-0fb3762762f40b5a9]
+module.ec2.aws_instance.this: Creation complete after 16s [id=i-042035045c988d699]
+Releasing state lock. This may take a few moments...
 
-Apply complete! Resources: 17 added, 0 changed, 0 destroyed.
+Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 
 Outputs:
 
-api_url = "http://ec2-44-193-223-249.compute-1.amazonaws.com:3000"
-ec2_public_ip = "44.193.223.249"
-rds_endpoint = "prova-devops-postgres.cumscnwfheb2.us-east-1.rds.amazonaws.com:5432"
-vpc_id = "vpc-0b04e2b45dbdc3b7b"
+api_url = "http://ec2-3-86-96-150.compute-1.amazonaws.com:3000"
+ec2_public_ip = "3.86.96.150"
+rds_endpoint = "prova-devops-postgres.cwaqxueqmojr.us-east-1.rds.amazonaws.com:5432"
+vpc_id = "vpc-0a9ca6bee9ccb8368"

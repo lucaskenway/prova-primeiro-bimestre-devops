@@ -524,3 +524,11 @@ A conversa completa, com as respostas da IA, está em [`conversa-completa.md`](c
 78. **01/10 21:29** — já terminou o destroy?
 79. **01/10 21:30** — já terminou o destroy?
 80. **01/10 21:34** — pega os resudatos e colocar em txt do novos e dps faz o pr mais nao coloca vc no pr
+81. **01/10 21:36** — Agora reescrevo a parte da nuvem do entrega.md com os resultados da subida nova, com links para a pasta subida-conta-377871695195/. Leio o arquivo atual antes:
+82. **01/10 21:41** — ja revivou as resposta no
+83. **01/10 21:42** — pode escrever no relatorio
+84. **01/10 21:45** — olha tudo de novo e ve se nao falta nada
+85. **01/10 21:47** — A 2ª subida na conta [outra conta do Learner Lab] está sem destroy. pode destroy
+86. **01/10 21:48** — [credenciais AWS coladas — omitidas por segurança]
+87. **01/10 21:50** — │ [outra conta do Learner Lab] │ weslley_lucas_souza_alves │ Outro Lab seu (outra disciplina). Nada da prova lá esta nao [outra conta do Learner Lab] │ weslley_lucas_souza_alves │ ⚠️ 2ª subida sem destroy. As credenciais foram canceladas esta aqui nao nao so deixa 377871695195 │ Testar_aluno │ ✅ 3ª subida já destruída. São essas credenciais esta conta so ]
+88. **01/10 21:53** — no relatrio so deixa esta conta e ve se aprecer as outras na evidecas
